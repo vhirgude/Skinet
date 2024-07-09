@@ -1,4 +1,5 @@
 using Core.Entities;
+using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers;
@@ -7,31 +8,36 @@ namespace API.Controllers;
     [Route("api/[controller]")]
     public class ProductsController:ControllerBase
     {
-        private readonly DataContext _context;
-        public ProductsController(DataContext context)
+        private readonly IProductRepository _productRepository;
+        public ProductsController(IProductRepository productRepository)
         {
-            _context = context;
+            _productRepository = productRepository;
         }
         [HttpGet]
-        public ActionResult<IEnumerable<Product>> GetProducts()
+        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
-            var products=_context.Products.ToList();
-            return products;
+            var products=await _productRepository.GetProductsAsync();
+            return Ok(products);
         }
          [HttpGet("{id}")]
-        public ActionResult<Product> GetProductById(int id)
+        public async Task<ActionResult<Product>> GetProductById(int id)
         {
-            var product=_context.Products.Find(id);
-            return product;
+            var product=await _productRepository.GetProductByIdAsync(id);
+            return Ok(product);
         }
-        [HttpPost]
-        public ActionResult<Product> AddProduct([FromBody]Product product)
+        [HttpGet("brands")]
+        public async Task<ActionResult<Product>> GetProductBrands()
         {
-            _context.Products.Add(product);
-            _context.SaveChanges(); 
-
-            return product;         
+            var productBrand=await _productRepository.GetProductBrandAsync();
+            return Ok(productBrand);
         }
+        [HttpGet("types")]
+        public async Task<ActionResult<Product>> GetProductTypes()
+        {
+            var productType=await _productRepository.GetProductTypeAsync();
+            return Ok(productType);
+        }
+        
 
     }
     
