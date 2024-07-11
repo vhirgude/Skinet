@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using API.Dtos;
 using API.Helpers;
 using AutoMapper;
@@ -56,7 +57,14 @@ namespace API.Controllers;
             var productType=await _productTypeRepo.GetAsync();
             return Ok(productType);
         }
-        
+        [HttpGet("Removehtml")]
+    public ActionResult RemoveHTMLTag(string input)
+    {
+        //string title = "<b> Hulk Hogan's Celebrity Championship Wrestling &nbsp;&nbsp;&nbsp;<font color=\"#228b22\">[Proj # 206010]</font></b>&nbsp;&nbsp;&nbsp; (Reality Series, &nbsp;)".Replace("&nbsp;",string.Empty);            
+        input.Replace("&nbsp;",string.Empty);
+        string s = Regex.Replace(input, "<.*?>", String.Empty).Replace("&nbsp;",string.Empty);;
+        return Ok(s);
+    }
 
     }
     
