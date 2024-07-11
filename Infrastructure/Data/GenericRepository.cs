@@ -13,6 +13,12 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
         _dataContext = dataContext;
     }
+
+    public async Task<int> Count(ISpecification<T> spec)
+    {
+        return await ApplySpecification(spec).CountAsync();
+    }
+
     public async Task<IReadOnlyList<T>> GetAsync()
     {
         return await _dataContext.Set<T>().ToListAsync();
