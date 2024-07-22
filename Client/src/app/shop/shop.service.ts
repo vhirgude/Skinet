@@ -25,6 +25,9 @@ baseURL='https://localhost:5001/api/';
 
     return this.Http.get<Pagination<Product[]>>(this.baseURL+'products',{params});
   }
+  getProduct(id:number){
+    return this.Http.get<Product>(this.baseURL+'products/'+id);
+  }
   getBrands(){
     return this.Http.get<Brand[]>(this.baseURL+'products/Brands');
   }
